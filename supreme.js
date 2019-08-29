@@ -140,6 +140,9 @@ supreme.server = function server(primus, options) {
       const params = {
         method: options.method,               // Set the correct method.
         uri: url(server, options.url),        // Compile the correct URL
+        headers: {
+          'X-Forwarded-Proto': 'https'
+        },
         json: {                               // The actual JSON payload
           msg: msg,                           // - The message we write
           sparks: sparks                      // - Who the message should receive
@@ -150,9 +153,6 @@ supreme.server = function server(primus, options) {
           sendImmediately: true               // Send the header, don't wait for 401.
         }
       };
-      if(options.headers) {
-        params.headers = options.headers;
-      }
       request(params, function requested(err, response, body) {
         response = response || {};
         body = body || {};
