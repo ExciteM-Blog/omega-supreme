@@ -137,7 +137,7 @@ supreme.server = function server(primus, options) {
     });
 
     mapLimit(servers, options.concurrently, function contact(server, next) {
-      request({
+      const params = {
         method: options.method,               // Set the correct method.
         uri: url(server, options.url),        // Compile the correct URL
         json: {                               // The actual JSON payload
@@ -149,7 +149,11 @@ supreme.server = function server(primus, options) {
           pass: options.password,             // And password.
           sendImmediately: true               // Send the header, don't wait for 401.
         }
-      }, function requested(err, response, body) {
+      };
+      if(options.headers) {
+        params.headers = options.headers;
+      }
+      request(params, function requested(err, response, body) {
         response = response || {};
         body = body || {};
 
